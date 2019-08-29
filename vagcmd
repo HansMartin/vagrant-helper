@@ -1,0 +1,14 @@
+#!/bin/bash
+# Requires rofi and bash intalled on the VM
+allrunning=$(vagrant global-status | awk '/running/ {print $2 " (" $1 ")"}')
+count=$(echo "$allrunning" | wc -l)
+
+# if only one VM is running, use that instead of choosing via dmenu
+if [ $count -eq 1 ] ; then
+    choose=$(echo "$allrunning" | awk '{print $2}' | sed 's/[()]//g')
+else
+    choose=$(echo "$allrunning" | dmenu | awk '{print $2}' | sed 's/[()]//g')
+fi
+
+echo "Your choose: $choose"
+vagrant ssh -c "/bin/bash -c 'rofi -show run'" "$choose"

@@ -1,0 +1,2 @@
+#!/bin/sh
+vagrant global-status | awk '/running/ {print $2 " (" $1 ")"}'

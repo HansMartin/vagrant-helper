@@ -1,0 +1,10 @@
+#!/bin/sh
+
+if [ $# -eq 0 ] ; then
+    choose=$(vagrant global-status | awk '/running/ {print $2 " (" $1 ")"}' | fzf | awk '{print $2}' | sed 's/[()]//g')
+else
+    choose=$(vagrant global-status | awk '/running/ {print $2 " (" $1 ")"}' | grep "$1" | awk '{print $2}' | sed 's/[()]//g')
+fi
+
+# start vagrant only if a choise was made
+[ "$choose" != "" ] && vagrant halt "$choose"
